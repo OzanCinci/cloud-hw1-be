@@ -1,10 +1,24 @@
+// ozan-1 : username
+// ozan-1-cloud : password
+const port = process.env.PORT || 3001;
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3001;
+const setupMiddlewares = require('./appSetup/middlewares');
+const setupRouters = require('./appSetup/routers');
+const { connectDatabase } = require('./appSetup/db');
 
-app.get("/", (req, res) => res.type('text').send("deneme 123"));
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// Apply middlewares
+setupMiddlewares(app);
+// Setup routers
+setupRouters(app);
 
-server.keepAliveTimeout = 120 * 1000;
-server.headersTimeout = 120 * 1000;
+
+connectDatabase()
+  .then(()=>{
+    console.log("connected to db!");
+    const server = app.listen(port, () => console.log(`App listening on port ${port}!`));
+    server.keepAliveTimeout = 120 * 1000;
+    server.headersTimeout = 130 * 1000; // Slightly more than keepAliveTimeout
+  })
+  .catch((err) => console.log(err));
