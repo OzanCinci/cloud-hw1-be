@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const computerSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -8,12 +9,25 @@ const computerSchema = new mongoose.Schema({
   year: Number, // Optional
   processor: String, // Optional
   ram: String, // Optional
-  storage: String, // Optional
+  storage: {
+    ssd: { type: String, default: null }, // Optional, default value set to null if not provided
+    hdd: { type: String, default: null } // Optional, default value set to null if not provided
+  },
   graphicsCard: String, // Optional
   operatingSystem: String, // Optional
   price: { type: Number, required: true },
   image: String, // Optional
   description: String, // Optional
+  customFields: { type: Schema.Types.Mixed },
+  activate: Boolean,
+  showDetailToEveryOne: Boolean,
+  userId: { type: Schema.Types.ObjectId, ref: 'User' }, // Link to User
+  userContact: {
+    phoneNumber: String,
+    email: String,
+    name: String,
+    surname: String,
+  }
 }, { timestamps: true }); // Enable timestamps
 
 module.exports = mongoose.model('Computer', computerSchema);

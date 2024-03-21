@@ -1,24 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const computerService = require('./computerService'); // Adjust the path as needed
+const vehicleService = require("./vehicleService");
 
-// POST endpoint to create a new computer
+
+
+// POST endpoint to create a new vehicle
 router.post('/', async (req, res) => {
     try {
-        const computerData = req.body.computerData;
+        const vehicleData = req.body.vehicleData;
         const userData = req.body.userData;
-        const computer = await computerService.createComputer(computerData,userData);
-        res.status(201).json(computer);
+        const vehicle = await vehicleService.createVehicle(vehicleData,userData);
+        res.status(201).json(vehicle);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
 
-// GET endpoint to fetch all computers
+// GET endpoint to fetch all vehicles
 router.get('/', async (req, res) => {
     try {
-        const computers = await computerService.getAllComputers(req);
-        res.json(computers);
+        const vehicles = await vehicleService.getAllVehicles(req);
+        res.json(vehicles);
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message });
@@ -29,8 +31,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const computers = await computerService.getComputerById(id);
-        res.json(computers);
+        const vehicle = await vehicleService.getVehicleById(id);
+        res.json(vehicle);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
