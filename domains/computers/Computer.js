@@ -10,8 +10,8 @@ const computerSchema = new mongoose.Schema({
   processor: String, // Optional
   ram: String, // Optional
   storage: {
-    ssd: { type: String, default: null }, // Optional, default value set to null if not provided
-    hdd: { type: String, default: null } // Optional, default value set to null if not provided
+    ssd: { type: String }, // Optional, default value set to null if not provided
+    hdd: { type: String } // Optional, default value set to null if not provided
   },
   graphicsCard: String, // Optional
   operatingSystem: String, // Optional
@@ -28,6 +28,6 @@ const computerSchema = new mongoose.Schema({
     name: String,
     surname: String,
   }
-}, { timestamps: true }); // Enable timestamps
+}, { timestamps: true, strict: false }); // Enable timestamps
 
 module.exports = mongoose.model('Computer', computerSchema);
