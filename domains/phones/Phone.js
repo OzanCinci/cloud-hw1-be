@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const phoneSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    brand: { type: String, required: true },
+    brand: String,
     model: String, // Optional
     year: Number, // Optional
     operatingSystem: String, // Optional
@@ -31,6 +31,6 @@ const phoneSchema = new mongoose.Schema({
         name: String,
         surname: String,
       }
-}, { timestamps: true }); // Enable timestamps
+}, { timestamps: true, strict: false }); // Enable timestamps
 
 module.exports = mongoose.model('Phone', phoneSchema);

@@ -25,17 +25,34 @@ router.post('/log-in', async (req, res) => {
     }
 });
 
-// POST endpoint to log in
 router.delete('/:email', async (req, res) => {
     try {
         const { email } = req.params;
         await userService.deleteUser(req.body,email);
-        res.status(200).json(response);
+        res.status(200).json({"ok":"ok"});
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
 
+router.put('/update-account', async (req, res) => {
+    try {
+        const updatedUser = await userService.updateUser(req.body);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// POST endpoint to log in
+router.post('/', async (req, res) => {
+    try {
+        const allNonadminUsers = await userService.getAllNonAdminUser(req.body);
+        res.status(200).json(allNonadminUsers);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
 
 
 // Export the router

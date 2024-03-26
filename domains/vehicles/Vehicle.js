@@ -4,14 +4,14 @@ const Schema = mongoose.Schema;
 const vehicleSchema = new mongoose.Schema({
     title: { type: String, required: true },
     type: String, // Optional
-    brand: { type: String, required: true },
+    brand: String, // Optional
     model: String, // Optional
     year: Number, // Optional
     color: String, // Optional
     engineDisplacement: String, // Optional
     fuelType: String, // Optional
     transmissionType: String, // Optional
-    mileage: Number, // Optional
+    mileage: String, // Optional
     price: { type: Number, required: true },
     image: String, // Optional
     description: String, // Optional
@@ -25,6 +25,6 @@ const vehicleSchema = new mongoose.Schema({
         name: String,
         surname: String,
     }
-}, { timestamps: true }); // Enable timestamps
+}, { timestamps: true, strict: false }); // Enable timestamps
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);

@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  name: { type: String, required: true },
-  surname: { type: String, required: true },
+  name: String,
+  surname: String,
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: String,
@@ -14,6 +14,6 @@ const userSchema = new Schema({
     privateLessons: [{ type: Schema.Types.ObjectId, ref: 'PrivateLesson' }],
     phones: [{ type: Schema.Types.ObjectId, ref: 'Phone' }]
   }
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 module.exports = mongoose.model('User', userSchema);

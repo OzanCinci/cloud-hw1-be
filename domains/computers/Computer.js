@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const computerSchema = new mongoose.Schema({
   title: { type: String, required: true },
   type: String, // Optional
-  brand: { type: String, required: true },
+  brand: String,
   model: String, // Optional
-  year: Number, // Optional
+  year: String, // Optional
   processor: String, // Optional
   ram: String, // Optional
   storage: {

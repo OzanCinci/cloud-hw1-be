@@ -31,9 +31,23 @@ const getVehicleById = async (id) => {
     return vehicle;
 };
 
+const findAndDeleteVehicleById = async (id,userData) => {
+    const user = await validateUser(userData.password,userData.email);
+    const vehicle = await Vehicle.findById(id);
+    console.log(vehicle?.userId)
+    console.log(user._id)
+    if (!vehicle || (vehicle?.userId!=user._id && user.role!="ADMIN")) {
+        throw new Error(`vehicle with id:${id} not found!`);
+    }
+    // If the vehicle exists, delete it
+    const deletedVehicle = Vehicle.deleteOne({ _id: id }); 
+    return deletedVehicle;
+};
+
 
 module.exports = {
     createVehicle,
     getAllVehicles,
-    getVehicleById
+    getVehicleById,
+    findAndDeleteVehicleById
 };

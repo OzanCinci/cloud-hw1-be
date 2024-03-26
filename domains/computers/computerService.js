@@ -14,6 +14,7 @@ const createComputer = async (computerData,userData) => {
         name: user.name,
         surname: user.surname,
     }
+    computer.userId = user._id;
     const savedComputer = await computer.save();
     return savedComputer;
 };
@@ -30,8 +31,22 @@ const getComputerById = async (id) => {
     return computer;
 };
 
+const findAndDeleteComputerById = async (id,userData) => {
+    const user = await validateUser(userData.password,userData.email);
+    const computer = await Computer.findById(id);
+    console.log(computer?.userId)
+    console.log(user._id)
+    if (!computer || (computer?.userId!=user._id && user.role!="ADMIN")) {
+        throw new Error(`Computer with id:${id} not found!`);
+    }
+    // If the computer exists, delete it
+    const deletedComputer = Computer.deleteOne({ _id: id }); 
+    return deletedComputer;
+};
+
 module.exports = {
     createComputer,
     getAllComputers,
-    getComputerById
+    getComputerById,
+    findAndDeleteComputerById
 };
