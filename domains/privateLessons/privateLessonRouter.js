@@ -48,5 +48,17 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userData = req.body.userData;
+        const privateLessonData = req.body.data;
+        const pl = await privateLessonService.updatePrivateLessonById(id,privateLessonData,userData);
+        res.json(pl);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Export the router
 module.exports = router;

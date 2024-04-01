@@ -35,15 +35,54 @@ const prepareComputersQuery = (req) => {
 };
 
 const preparePhonesQuery = (req) => {
-    return {};
+    const q = req.query;
+    let result = {};
+    if (!q)
+        return result;
+
+    delete q.page;
+    delete q.limit;
+
+    // Example of simple sanitation, you might want to use a library for more complex cases
+    for (const key in q) {
+        result[key] = decodeURIComponent(q[key]);
+    }
+
+    return result;
 };
 
 const prepareVehiclesQuery = (req) => {
-    return {};
+    const q = req.query;
+    let result = {};
+    if (!q)
+        return result;
+
+    delete q.page;
+    delete q.limit;
+
+    // Example of simple sanitation, you might want to use a library for more complex cases
+    for (const key in q) {
+        result[key] = decodeURIComponent(q[key]);
+    }
+
+    return result;
 };
 
 const preparePrivateLessonsQuery = (req) => {
-    return {};
+    const q = req.query;
+    let result = {};
+    if (!q)
+        return result;
+
+    delete q.page;
+    delete q.limit;
+
+    // Example of simple sanitation, you might want to use a library for more complex cases
+    for (const key in q) {
+        result[key] = decodeURIComponent(q[key]);
+    }
+
+    return result;
 };
 
 module.exports = {

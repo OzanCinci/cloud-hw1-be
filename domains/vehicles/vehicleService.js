@@ -36,7 +36,7 @@ const findAndDeleteVehicleById = async (id,userData) => {
     const vehicle = await Vehicle.findById(id);
     console.log(vehicle?.userId)
     console.log(user._id)
-    if (!vehicle || (vehicle?.userId!=user._id && user.role!="ADMIN")) {
+    if (!vehicle || (vehicle?.userId?.toString()!=user._id?.toString() && user.role!="ADMIN")) {
         throw new Error(`vehicle with id:${id} not found!`);
     }
     // If the vehicle exists, delete it
@@ -44,10 +44,46 @@ const findAndDeleteVehicleById = async (id,userData) => {
     return deletedVehicle;
 };
 
+const updateVehicleById = async (id, vehicleData, userData) => {
+    const user = await validateUser(userData.password, userData.email);
+    const vehicle = await Vehicle.findById(id);
+
+    if (!vehicle) {
+        throw new Error(`Vehicle with id:${id} not found!`);
+    }
+    
+    console.log("vehicle.userId , user._id: ",vehicle.userId , user._id)
+    if (vehicle.userId.toString() !== user._id.toString()) {
+        throw new Error(`User is not authorized to update this vehicle`);
+    }
+
+    // Initialize the update operations
+    let updateOps = {};
+
+    Object.keys(vehicleData).forEach(key => {
+        updateOps[key] = vehicleData[key];
+    });
+
+    Object.keys(vehicle.toObject()).forEach(key => {
+        if (!vehicleData.hasOwnProperty(key) && !['_id', 'userId', 'createdAt', 'updatedAt', '__v', 'userContact'].includes(key)) {
+            // $unset operator to remove field
+            updateOps[`$unset`] = updateOps[`$unset`] || {};
+            updateOps[`$unset`][key] = "";
+        }
+    });
+
+    // Perform the update operation
+    const updated = await Vehicle.findByIdAndUpdate(id, updateOps, { new: true });
+    
+    return updated;
+};
+
+
 
 module.exports = {
     createVehicle,
     getAllVehicles,
     getVehicleById,
-    findAndDeleteVehicleById
+    findAndDeleteVehicleById,
+    updateVehicleById
 };

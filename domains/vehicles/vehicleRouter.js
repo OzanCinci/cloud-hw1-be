@@ -38,12 +38,25 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// GET endpoint to fetch a vehicle by id
+
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const userData = req.body.userData;
         const vehicle = await vehicleService.findAndDeleteVehicleById(id,userData);
+        res.json(vehicle);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userData = req.body.userData;
+        const vehicleData = req.body.data;
+        const vehicle = await vehicleService.updateVehicleById(id,vehicleData,userData);
         res.json(vehicle);
     } catch (error) {
         res.status(500).json({ message: error.message });

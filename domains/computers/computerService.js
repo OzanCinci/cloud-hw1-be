@@ -32,6 +32,7 @@ const getComputerById = async (id) => {
 };
 
 const findAndDeleteComputerById = async (id,userData) => {
+    console.log("userData: ",userData);
     const user = await validateUser(userData.password,userData.email);
     const computer = await Computer.findById(id);
     console.log(computer?.userId)
@@ -44,9 +45,46 @@ const findAndDeleteComputerById = async (id,userData) => {
     return deletedComputer;
 };
 
+
+const updateComputerById = async (id, computerData, userData) => {
+    const user = await validateUser(userData.password, userData.email);
+    const computer = await Computer.findById(id);
+
+    if (!computer) {
+        throw new Error(`computer with id:${id} not found!`);
+    }
+    
+    console.log("computer.userId , user._id: ",computer.userId?.toString() , user?._id.toString())
+    if (computer.userId?.toString() !== user._id?.toString()) {
+        throw new Error(`User is not authorized to update this computer`);
+    }
+    // Initialize the update operations
+    let updateOps = {};
+
+    // Set new and existing fields from computerData
+    Object.keys(computerData).forEach(key => {
+        updateOps[key] = computerData[key];
+    });
+
+    // Unset fields that are not in computerData
+    Object.keys(computer.toObject()).forEach(key => {
+        if (!computerData.hasOwnProperty(key) && !['_id', 'userId', 'createdAt', 'updatedAt', '__v', 'userContact'].includes(key)) {
+            // $unset operator to remove field
+            updateOps[`$unset`] = updateOps[`$unset`] || {};
+            updateOps[`$unset`][key] = "";
+        }
+    });
+
+    // Perform the update operation
+    const updated = await Computer.findByIdAndUpdate(id, updateOps, { new: true });
+    
+    return updated;
+};
+
 module.exports = {
     createComputer,
     getAllComputers,
     getComputerById,
-    findAndDeleteComputerById
+    findAndDeleteComputerById,
+    updateComputerById
 };

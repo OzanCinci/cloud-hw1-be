@@ -48,5 +48,17 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userData = req.body.userData;
+        const computerData = req.body.data;
+        const computer = await computerService.updateComputerById(id,computerData,userData);
+        res.json(computer);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Export the router
 module.exports = router;
